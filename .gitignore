@@ -1,1 +1,8 @@
+mpv.com
+mpv.exe
+yt-dlp.exe
+*.dll
+doc/
 watch_later/
+installer/*.bat
+installer/*ico
