@@ -1,1 +1,7 @@
-watch_later/
+installer/*.bat
+installer/*.ico
+*.com
+*.exe
+*.dll
+doc/
+portable_config/watch_later/
