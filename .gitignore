@@ -1,4 +1,4 @@
-installer/*.bat
+installer/*.ps1
 installer/*.ico
 *.com
 doc/
