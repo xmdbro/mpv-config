@@ -1,5 +1,4 @@
 installer/*.ps1
-installer/*.ico
 *.com
 doc/
 portable_config/watch_later/
