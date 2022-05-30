@@ -1,4 +1,4 @@
 # README
 
-make sure to run `mpy-install.bat` under `~~/installer`.\
+make sure to run `mpv-install.bat` under `~~/installer`.\
 running `updater.bat` is optional.
