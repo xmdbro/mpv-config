@@ -1,3 +1,5 @@
+-- NOTE: This script is no longer necessary as of mpv 0.30.0!
+
 loaded = false
 
 function search_and_load_lrc()
