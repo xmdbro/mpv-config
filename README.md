@@ -15,6 +15,7 @@
 - <kbd>F10</kbd> - Display all video, audio, and subtitle tracks
 - <kbd>F11</kbd> - Show the list of chapters (Name, current chapter, and timestamp)
 - <kbd>PAUSE</kbd> - stop playback (quit or enter idle mode)
+- <kbd>CTRL+r</kbd> - Rotate the video
 
 #### Subtitles
 - <kbd>Ctrl+V</kbd> - decrease the subtitle font size by 0.1
@@ -77,3 +78,5 @@
 - [webm.lua](https://github.com/ekisu/mpv-webm)
   - <kbd>W</kbd>Create WebMs using mpv. 
   - Configure to your desires [here](https://github.com/xmdbro/mpv-config/blob/main/portable_config/script-opts/webm.conf)
+
+# Shaders
