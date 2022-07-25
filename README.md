@@ -1,8 +1,9 @@
 # README
 
 - Quickly skim through [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf) to make sure it plays back just fine. Otherwise you may have problems.
-- Make sure to run [mpv-install.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/mpv-install.bat).
+- Make sure to run [mpv-install.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/mpv-install.bat) if you haven't done that already.
 - Running [updater.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/updater.bat) is optional.
+- My config runs on Vulkan and may not be compatible with every device. If that is the case, make sure to check [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L84). 
 
 # Keybinds
 
@@ -74,9 +75,17 @@
 - [trackselect.lua](https://github.com/po5/trackselect/blob/master/trackselect.lua)
   - Automatically select your preferred tracks based on title, because --slang isn't smart enough.
 - [visualizer.lua](https://github.com/mfcc64/mpv-scripts/blob/master/visualizer.lua)
-  - <kbd>c</kbd> Cycle through various audio visualizations.
+  - <kbd>c</kbd> - Cycle through various audio visualizations.
 - [webm.lua](https://github.com/ekisu/mpv-webm)
-  - <kbd>W</kbd>Create WebMs using mpv. 
+  - <kbd>W</kbd> - Create WebMs using mpv. 
   - Configure to your desires [here](https://github.com/xmdbro/mpv-config/blob/main/portable_config/script-opts/webm.conf)
 
 # Shaders
+- Mileage may vary depending on how strong your gpu is. For reference, my config runs fine on a 1050ti.
+- If your GPU is better than a 1050ti, change [this](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L119) and [this](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L119) to `~~/shaders/nnedi3-nns256-win8x6.hook`
+- If you're dropping frames, comment out all the shaders and shader profiles and replace them with:
+  ```
+  scale=spline36
+  cscale=spline36
+  dscale=mitchell
+  ```
