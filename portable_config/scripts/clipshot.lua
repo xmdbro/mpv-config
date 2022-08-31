@@ -1,4 +1,4 @@
-NAME = 'mpv-screenshot.jpeg'
+NAME = 'mpv-screenshot.png'
 
 if package.config:sub(1, 1) == '\\' then -- Windows
     SHOT = os.getenv('TEMP')..'\\'..NAME

@@ -37,7 +37,7 @@
   - Automatically apply profiles based on runtime conditions.
 - [autoload.lua](https://github.com/mpv-player/mpv/blob/master/TOOLS/lua/autoload.lua)
   - Automatically loads playlist entries before and after the currently opened file.
-- [clipshot.lua](https://github.com/ObserverOfTime/mpv-scripts/blob/master/clipshot.lua)
+- [clipshot.lua](https://github.com/xmdbro/mpv-config/blob/main/portable_config/scripts/clipshot.lua)
   - <kbd>c</kbd> - Copies screenshot (with subs) to clipboard instead of saving to disk.
 - [coverart.lua](https://github.com/CogentRedTester/mpv-coverart/blob/master/coverart.lua)
   - Automatically loads external cover art as a video track
