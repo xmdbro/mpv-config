@@ -1,9 +1,9 @@
 # README
-
-- Quickly skim through [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf) to make sure it plays back just fine. Otherwise you may have problems.
+- If you have compatibility issues, I suggest using replacing mpv.conf by renaming mpv-compat.conf to mpv.conf
+- Quickly go through [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf) to make sure it plays back just fine. Otherwise you may have problems.
 - Make sure to run [mpv-install.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/mpv-install.bat) if you haven't done that already.
 - Running [updater.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/updater.bat) is optional.
-- My config runs on Vulkan and may not be compatible with every device. If that is the case, make sure to check [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L84). 
+- Config runs on vulkan by default and may not be compatible with every device. If that is the case, make sure to check [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L84). 
 
 # Keybinds
 
@@ -44,7 +44,6 @@
 - ~~[lrc-autoload.lua]()~~ **No longer necessary after mpv 0.30.0!**
   - ~~Automatically loads .lrc files if found~~
 - [mines.lua](https://github.com/wiiaboo/mpv-scripts/blob/master/mines.lua)
-  - What can I say? It's minesweeper.
   - <kbd>CTRL+x</kbd> - Toggle minesweeper.
   - <kbd>UP/DOWN/LEFT/RIGHT</kbd> - Navigate.
   - <kbd>SPACE</kbd> - Open a tile.
@@ -53,7 +52,7 @@
   - <kbd>w</kbd> - Cycle between presets.
 - [mpv_thumbnail_script.lua](https://github.com/TheAMM/mpv_thumbnail_script)
   - Displays thumbnails when hovering over the seekbar. Thumbnails save to `%TEMP%\mpv_thumbs_cache` by default on Windows.
-  - Each iteration of `mpv_thumbnail_script_server.lua` will assign more threads to generating thumbnails. Depending on your CPU, you might have to lower it by one or increase it by a few.
+  - Each iteration of `mpv_thumbnail_script_server.lua` will assign more threads to generating thumbnails. Increase or decrease depending on CPU. Recommended is 2 servers.
 - [mpv-drpc.lua](https://github.com/noaione/mpv-discordRPC)
   - Discord RPC Integration for mpv.
 - [mpv-gif.lua](https://github.com/the-honey/mpv-gif-generator/blob/master/mpv-gif.lua)
@@ -81,11 +80,12 @@
   - Configure to your desires [here](https://github.com/xmdbro/mpv-config/blob/main/portable_config/script-opts/webm.conf)
 
 # Shaders
-- Mileage may vary depending on how strong your gpu is. For reference, my config runs fine on a 1050ti.
+- Mileage may vary depending on how strong your gpu is. For reference, config runs fine on a 1050ti.
 - If your GPU is better than a 1050ti, change [this](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L119) and [this](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf#L119) to `~~/shaders/nnedi3-nns256-win8x6.hook`
-- If you're dropping frames, comment out all the shaders and shader profiles and replace them with:
+- If you're dropping frames, comment out all the shaders and shader profiles and replace them with the following:
   ```
   scale=spline36
   cscale=spline36
   dscale=mitchell
   ```
+  OR replace mpv.conf with mpv-compat.conf by renaming mpv-compat.conf to mpv.conf
