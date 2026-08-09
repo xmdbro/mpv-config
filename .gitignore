@@ -2,3 +2,4 @@ installer/*.ps1
 *.com
 doc/
 portable_config/watch_later/
+portable_config/cache/
