@@ -1,4 +1,6 @@
 # README
+> [!WARNING]
+> This README is not kept to date as I am too lazy to rewrite. Lots of changes since the last time this was updated.
 - If you have compatibility issues, I suggest using replacing mpv.conf by renaming mpv-compat.conf to mpv.conf
 - Quickly go through [mpv.conf](https://github.com/xmdbro/mpv-config/blob/main/portable_config/mpv.conf) to make sure it plays back just fine. Otherwise you may have problems.
 - Make sure to run [mpv-install.bat](https://github.com/xmdbro/mpv-config/blob/main/installer/mpv-install.bat) if you haven't done that already.
