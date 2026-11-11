@@ -143,20 +143,24 @@ local osc_param = { -- calculated by osc_init()
     areas = {},
 }
 
+local title_font_size = 24
+local tooltip_font_size = 16
+local message_font_scale = 0.85
+
 local osc_styles = {
-    TransBg = '{\\blur100\\bord150\\1c&H000000&\\3c&H000000&}',
+    TransBg = '{\\blur80\\bord122\\1c&H000000&\\3c&H000000&}',
     SeekbarBg = '{\\blur0\\bord0\\1c&HFFFFFF&}',
     SeekbarFg = '{\\blur1\\bord1\\1c&HE39C42&}',
     VolumebarBg = '{\\blur0\\bord0\\1c&H999999&}',
     VolumebarFg = '{\\blur1\\bord1\\1c&HFFFFFF&}',
-    Ctrl1 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs36\\fnmaterial-design-iconic-font}',
-    Ctrl2 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font}',
-    Ctrl2Flip = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font\\fry180',
-    Ctrl3 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font}',
-    Time = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&H000000&\\fs17\\fn' .. user_opts.font .. '}',
-    Tooltip = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H000000&\\fs18\\fn' .. user_opts.font .. '}',
-    Title = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H0\\fs38\\q2\\fn' .. user_opts.font .. '}',
-    WinCtrl = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H0\\fs20\\fnmpv-osd-symbols}',
+    Ctrl1 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs30\\fnmaterial-design-iconic-font}',
+    Ctrl2 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs21\\fnmaterial-design-iconic-font}',
+    Ctrl2Flip = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs21\\fnmaterial-design-iconic-font\\fry180',
+    Ctrl3 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs21\\fnmaterial-design-iconic-font}',
+    Time = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&H000000&\\fs15\\fn' .. user_opts.font .. '}',
+    Tooltip = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H000000&\\fs' .. tooltip_font_size .. '\\fn' .. user_opts.font .. '}',
+    Title = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H0\\fs' .. title_font_size .. '\\q2\\fn' .. user_opts.font .. '}',
+    WinCtrl = '{\\blur1\\bord0.5\\1c&HFFFFFF&\\3c&H0\\fs18\\fnmpv-osd-symbols}',
     elementDown = '{\\1c&H999999&}',
     elementHighlight = '{\\blur1\\bord1\\1c&HFFC033&}',
 }
@@ -809,7 +813,6 @@ function render_elements(master_ass)
                         if osd_w then
                             local r_w, r_h = get_virt_scale_factor()
 
-                            local tooltip_font_size = 18
                             local thumbPad = 4
                             local thumbMarginX = 18 / r_w
                             local thumbMarginY = tooltip_font_size + thumbPad + 2 / r_h
@@ -932,7 +935,7 @@ function limited_list(prop, pos)
         return count, proplist
     end
 
-    local fs = tonumber(mp.get_property('options/osd-font-size'))
+    local fs = mp.get_property_number('options/osd-font-size', 22) * message_font_scale
     local max = math.ceil(osc_param.unscaled_y*0.75 / fs)
     if max % 2 == 0 then
         max = max - 1
@@ -1023,7 +1026,7 @@ function render_message(ass)
     then
         local _, lines = string.gsub(state.message_text, '\\N', '')
 
-        local fontsize = tonumber(mp.get_property('options/osd-font-size'))
+        local fontsize = mp.get_property_number('options/osd-font-size', 22) * message_font_scale
         local outline = tonumber(mp.get_property('options/osd-border-size'))
         local maxlines = math.ceil(osc_param.unscaled_y*0.75 / fontsize)
         local counterscale = osc_param.playresy / osc_param.unscaled_y
@@ -1201,7 +1204,7 @@ layouts = function ()
     osc_param.areas = {} -- delete areas
 
     -- area for active mouse input
-    add_area('input', get_hitbox_coords(posX, posY, 1, osc_geo.w, 104))
+    add_area('input', get_hitbox_coords(posX, posY, 1, osc_geo.w, 92))
 
     -- area for show/hide
     add_area('showhide', 0, 0, osc_param.playresx, osc_param.playresy)
@@ -1226,7 +1229,9 @@ layouts = function ()
     -- Alignment
     --
 	local refX = osc_w / 2
-	local refY = posY
+	local seekbar_y = posY - 80
+	local controls_y = posY - 34
+	local time_y = seekbar_y + 11
 	local geo
 	
     --
@@ -1234,14 +1239,14 @@ layouts = function ()
     --
     new_element('seekbarbg', 'box')
     lo = add_layout('seekbarbg')
-    lo.geometry = {x = refX , y = refY - 96 , an = 5, w = osc_geo.w - 50, h = 2}
+    lo.geometry = {x = refX , y = seekbar_y , an = 5, w = osc_geo.w - 50, h = 2}
     lo.layer = 13
     lo.style = osc_styles.SeekbarBg
     lo.alpha[1] = 128
     lo.alpha[3] = 128
 
     lo = add_layout('seekbar')
-    lo.geometry = {x = refX, y = refY - 96 , an = 5, w = osc_geo.w - 50, h = 16}
+    lo.geometry = {x = refX, y = seekbar_y , an = 5, w = osc_geo.w - 50, h = 16}
 	lo.style = osc_styles.SeekbarFg
     lo.slider.gap = 7
     lo.slider.tooltip_style = osc_styles.Tooltip
@@ -1256,13 +1261,13 @@ layouts = function ()
     lo = new_element('volumebarbg', 'box')
     lo.visible = (osc_param.playresx >= 750) and user_opts.volumecontrol
     lo = add_layout('volumebarbg')
-    lo.geometry = {x = 155, y = refY - 40, an = 4, w = 80, h = 2}
+    lo.geometry = {x = 155, y = controls_y, an = 4, w = 80, h = 2}
     lo.layer = 13
     lo.style = osc_styles.VolumebarBg
 
     
     lo = add_layout('volumebar')
-    lo.geometry = {x = 155, y = refY - 40, an = 4, w = 80, h = 8}
+    lo.geometry = {x = 155, y = controls_y, an = 4, w = 80, h = 8}
     lo.style = osc_styles.VolumebarFg
     lo.slider.gap = 3
     lo.slider.tooltip_style = osc_styles.Tooltip
@@ -1270,27 +1275,27 @@ layouts = function ()
 
 	-- buttons
     lo = add_layout('pl_prev')
-    lo.geometry = {x = refX - 120 - offset, y = refY - 40 , an = 5, w = 30, h = 24}
+    lo.geometry = {x = refX - 120 - offset, y = controls_y , an = 5, w = 30, h = 24}
     lo.style = osc_styles.Ctrl2
 
 	lo = add_layout('skipback')
-    lo.geometry = {x = refX - 60 - offset, y = refY - 40 , an = 5, w = 30, h = 24}
+    lo.geometry = {x = refX - 60 - offset, y = controls_y , an = 5, w = 30, h = 24}
     lo.style = osc_styles.Ctrl2
 
 
     if showjump then
         lo = add_layout('jumpback')
-        lo.geometry = {x = refX - 60, y = refY - 40 , an = 5, w = 30, h = 24}
+        lo.geometry = {x = refX - 60, y = controls_y , an = 5, w = 30, h = 24}
         lo.style = osc_styles.Ctrl2
     end
 			
     lo = add_layout('playpause')
-    lo.geometry = {x = refX, y = refY - 40 , an = 5, w = 45, h = 45}
+    lo.geometry = {x = refX, y = controls_y , an = 5, w = 45, h = 45}
     lo.style = osc_styles.Ctrl1	
 
     if showjump then
         lo = add_layout('jumpfrwd')
-        lo.geometry = {x = refX + 60, y = refY - 40 , an = 5, w = 30, h = 24}
+        lo.geometry = {x = refX + 60, y = controls_y , an = 5, w = 30, h = 24}
 
         -- HACK: jumpfrwd's icon must be mirrored for nonstandard # of seconds
         -- as the font only has an icon without a number for rewinding
@@ -1298,56 +1303,56 @@ layouts = function ()
     end
 
     lo = add_layout('skipfrwd')
-    lo.geometry = {x = refX + 60 + offset, y = refY - 40 , an = 5, w = 30, h = 24}
+    lo.geometry = {x = refX + 60 + offset, y = controls_y , an = 5, w = 30, h = 24}
     lo.style = osc_styles.Ctrl2	
 
     lo = add_layout('pl_next')
-    lo.geometry = {x = refX + 120 + offset, y = refY - 40 , an = 5, w = 30, h = 24}
+    lo.geometry = {x = refX + 120 + offset, y = controls_y , an = 5, w = 30, h = 24}
     lo.style = osc_styles.Ctrl2
 
 
 	-- Time
     lo = add_layout('tc_left')
-    lo.geometry = {x = 25, y = refY - 84, an = 7, w = 64, h = 20}
+    lo.geometry = {x = 25, y = time_y, an = 7, w = 64, h = 20}
     lo.style = osc_styles.Time	
 	
 
     lo = add_layout('tc_right')
-    lo.geometry = {x = osc_geo.w - 25 , y = refY -84, an = 9, w = 64, h = 20}
+    lo.geometry = {x = osc_geo.w - 25 , y = time_y, an = 9, w = 64, h = 20}
     lo.style = osc_styles.Time	
 
     lo = add_layout('cy_audio')
-	lo.geometry = {x = 37, y = refY - 40, an = 5, w = 24, h = 24}
+	lo.geometry = {x = 37, y = controls_y, an = 5, w = 24, h = 24}
     lo.style = osc_styles.Ctrl3
     lo.visible = (osc_param.playresx >= 540)
 	
     lo = add_layout('cy_sub')
-    lo.geometry = {x = 87, y = refY - 40, an = 5, w = 24, h = 24}
+    lo.geometry = {x = 87, y = controls_y, an = 5, w = 24, h = 24}
     lo.style = osc_styles.Ctrl3
     lo.visible = (osc_param.playresx >= 600)
 
     lo = add_layout('vol_ctrl')
-    lo.geometry = {x = 137, y = refY - 40, an = 5, w = 24, h = 24}
+    lo.geometry = {x = 137, y = controls_y, an = 5, w = 24, h = 24}
     lo.style = osc_styles.Ctrl3
     lo.visible = (osc_param.playresx >= 650)
 
 	lo = add_layout('tog_fs')
-    lo.geometry = {x = osc_geo.w - 37, y = refY - 40, an = 5, w = 24, h = 24}
+    lo.geometry = {x = osc_geo.w - 37, y = controls_y, an = 5, w = 24, h = 24}
     lo.style = osc_styles.Ctrl3
     lo.visible = (osc_param.playresx >= 540)    
 
 	lo = add_layout('tog_info')
-    lo.geometry = {x = osc_geo.w - 87, y = refY - 40, an = 5, w = 24, h = 24}
+    lo.geometry = {x = osc_geo.w - 87, y = controls_y, an = 5, w = 24, h = 24}
     lo.style = osc_styles.Ctrl3
     lo.visible = (osc_param.playresx >= 600)
     
-    geo = { x = 25, y = refY - 132, an = 1, w = osc_geo.w - 50, h = 48 }
+    geo = { x = 25, y = seekbar_y - 25, an = 1, w = osc_geo.w - 50, h = 32 }
     lo = add_layout('title')
     lo.geometry = geo
     lo.style = string.format('%s{\\clip(%f,%f,%f,%f)}', osc_styles.Title,
 								geo.x, geo.y - geo.h, geo.x + geo.w , geo.y + 5)
 	lo.alpha[3] = 0
-    lo.button.maxchars = geo.w / 23
+    lo.button.maxchars = geo.w / (title_font_size * 0.6)
 end
 
 -- Validate string type user options
