@@ -23,12 +23,14 @@ local user_opts = {
     scalefullscreen = 1.0,      -- scaling of the controller when fullscreen
     scaleforcedwindow = 2.0,    -- scaling when rendered on a forced window
     vidscale = true,            -- scale the controller with the video?
-    hidetimeout = 1500,         -- duration in ms until the OSC hides if no
+    hidetimeout = 1000,         -- duration in ms until the OSC hides if no
                                 -- mouse movement. enforced non-negative for the
                                 -- user, but internally negative is 'always-on'.
-    fadeduration = 250,         -- duration of fade out in ms, 0 = no fade
+    fadeduration = 150,         -- duration of fade out in ms, 0 = no fade
     minmousemove = 1,           -- minimum amount of pixels the mouse has to
                                 -- move between ticks to make the OSC show up
+    deadzonesize = 0,           -- fraction of window above the OSC that won't
+                                -- reveal it on mouse movement (0 to 1)
     iamaprogrammer = false,     -- use native mpv values and disable OSC
                                 -- internal track list management (and some
                                 -- functions that depend on it)
@@ -1206,7 +1208,7 @@ layouts = function ()
     -- area for active mouse input
     add_area('input', get_hitbox_coords(posX, posY, 1, osc_geo.w, 92))
 
-    -- area for show/hide
+    -- Track the whole window so visible window controls remain usable.
     add_area('showhide', 0, 0, osc_param.playresx, osc_param.playresy)
 
     -- fetch values
@@ -2208,12 +2210,17 @@ function process_event(source, what)
         state.mouse_in_window = true
 
         local mouseX, mouseY = get_virt_mouse_pos()
-        if (user_opts.minmousemove == 0) or
+        -- Only movement near the bottom may reveal or refresh the OSC.
+        -- Keep its input area reachable even when deadzonesize is 1.
+        local deadzone = math.max(0, math.min(1, user_opts.deadzonesize))
+        local showhide_y = math.max(0, math.min(osc_param.playresy * deadzone,
+                                             osc_param.playresy - 92))
+        if mouseY >= showhide_y and ((user_opts.minmousemove == 0) or
             (not ((state.last_mouseX == nil) or (state.last_mouseY == nil)) and
                 ((math.abs(mouseX - state.last_mouseX) >= user_opts.minmousemove)
                     or (math.abs(mouseY - state.last_mouseY) >= user_opts.minmousemove)
                 )
-            ) then
+            )) then
             show_osc()
         end
         state.last_mouseX, state.last_mouseY = mouseX, mouseY
